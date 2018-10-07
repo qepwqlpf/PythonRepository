@@ -5,8 +5,11 @@ import os
 from bs4 import BeautifulSoup
 import requests
 import re
+import os,re,time,random
 import os
 import lxml
+import socket
+socket.setdefaulttimeout(3)
 
 #
 # from GetUrlSet import GetPostUrlSet
@@ -16,7 +19,7 @@ class GetPostUrlSet:
         self.url = url
 
     def get_urls_set(self):
-        req = requests.get(self.url)
+        req = requests.get(self.url,timeout=60)
         req.encoding = 'utf-8'
         soup = BeautifulSoup(req.text, 'lxml')
         post_url_set = set()
@@ -46,27 +49,39 @@ class GetPics:
         print(titles)
         if not os.path.exists('posts/{}'.format(titles)):
             os.makedirs('posts/{}'.format(titles))
+
         f = open('posts/{}/{}.txt'.format(titles, self.post_number), 'w', encoding='utf-8')
         f.write(self.url+'\n')
         f.write(post_title.text+'\n\n\n\n\t\t\t')
         for string in describe_tag.stripped_strings:
             f.write(string+'\n')
         f.close()
-        for img_tag in img_tags:
-            img_url = img_tag.get('file')
-            real_url = 'http://f.p03.space/'+img_url
-            raw_img = requests.get(real_url)
-            img_file = open('posts/{}/{}.jpg'.format(titles, self.img_number), 'wb')
-            img_file.write(raw_img.content)
-            print(titles+'downing {}'.format(self.img_number))
-            img_file.close()
-            self.img_number +=1
+        if os.path.exists('posts/{}/{}.jpg'.format(titles, '1')) == False:
+            for img_tag in img_tags:
+             try:
+                img_url = img_tag.get('file')
+                real_url = 'http://f.p03.space/'+img_url
+                raw_img = requests.get(real_url)
+                img_file = open('posts/{}/{}.jpg'.format(titles, self.img_number), 'wb')
+                img_file.write(raw_img.content)
+                print(titles+'downing {}'.format(self.img_number))
+                img_file.close()
+                self.img_number +=1
+             except IndexError:
+                pass
+                time.sleep(2)
+                continue
+
+        else:
+            print('已经存在:' + titles)
+            print('已存在文件夹,跳过')
+            time.sleep(2)
 
 if __name__ == '__main__':
 
     url_set = set()
     counter = 1
-    for n in range(1, 10):
+    for n in range(4, 20):
         page = 'http://f.p03.space/forumdisplay.php?fid=19&filter=digest&page={}'.format(n)
         print(page)
         urlsgetter = GetPostUrlSet(page)
