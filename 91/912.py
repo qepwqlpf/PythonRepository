@@ -154,7 +154,7 @@ def random_ip():
     c=random.randint(1,255)
     d=random.randint(1,255)
     return(str(a)+'.'+str(b)+'.'+str(c)+'.'+str(d))
-flag=1
+flag=3
 while flag<=100:
     tittle=[]
     base_url='http://94.91p23.space/view_video.php?viewkey='
