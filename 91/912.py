@@ -159,7 +159,7 @@ while flag<=100:
     tittle=[]
     base_url='http://94.91p23.space/view_video.php?viewkey='
     # page_url='http://91porn.com/v.php?next=watch&page='+str(flag)
-    # page_url='http://91porn.com/v.php?&page='+str(flag)
+    # page_url='http://91porn.com/v.php?&pagasdfsdfe='+str(flag)
 
 
     # page_url='http://91porn.com/v.php?category=tf&viewtype=basic&page='+str(flag)  #上月收藏最多
